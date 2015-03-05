@@ -1,0 +1,8 @@
+ee(x).
+ee(not x).
+ee(x and y).
+ee(x or y).
+ee(x or (not y and z)).
+ee(x or y or (p and q)).
+ee(x or (a xor b)).
+
