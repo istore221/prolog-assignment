@@ -132,3 +132,31 @@ truth_nand(1,1,0).
      
 truth_not(0,1).   
 truth_not(1,0).
+
+
+
+
+
+ee(Expr) :- (
+					get_vars(Expr,[],_Vars),
+					reverse(_Vars,_Rev_Vars),
+					write(_Rev_Vars),
+					write('\t \t \t'),
+					write(Expr),
+					nl,
+					length(_Rev_Vars,_C),
+					comb_find(_C,Combinations),
+					write('----------------------------------------------------------'),nl,
+					between(-1, Combinations, X),
+					  dec2binz(X,_C,Binary),
+					  write(Binary),
+					  write('\t \t \t'),
+					  truth_assignment(Expr,_Rev_Vars,Binary,Value),
+					  write(Value),
+					  nl,
+					 
+					false,!
+					
+					
+						
+			).
