@@ -1,3 +1,38 @@
+/* overide stock operators */
+:- op(1000,xfy,'and').
+:- op(1000,xfy,'or').
+:- op(900,fy,'not').
+/* overide stock operators */
+
+
+
+get_vars(X,Invar,Outvar) :- (
+
+							atom(X), 
+							(member(X,Invar) -> 
+							
+									Outvar = Invar
+
+									; 
+									
+									Outvar = [X|Invar])
+
+						 ).
+                             
+								
+get_vars(X and Y,Invar,Outvar) :- get_vars(X,Invar,Vtemp),
+                                   get_vars(Y,Vtemp,Outvar).
+								   
+								   
+get_vars(X or Y,Invar,Outvar) :-  get_vars(X,Invar,Vtemp),
+                                   get_vars(Y,Vtemp,Outvar).
+								   
+get_vars(X xor Y,Invar,Outvar) :-  get_vars(X,Invar,Vtemp),
+                                   get_vars(Y,Vtemp,Outvar).
+								   
+
+								   
+get_vars(not X,Invar,Outvar) :-   get_vars(X,Invar,Outvar).
 
 
 
@@ -38,6 +73,36 @@ dec2binz(N,_Noofvars,R) :- (
 			).
 			
 			
+			
+
+truth_assignment(N,_,_,N) :- member(N,[0,1]).
+
+truth_assignment(X,Vars,A,Val) :- atom(X),
+                             lookup(X,Vars,A,Val).
+							 
+truth_assignment(X and Y,Vars,A,Val) :- truth_assignment(X,Vars,A,VX),
+                                   truth_assignment(Y,Vars,A,VY),
+                                   truth_and(VX,VY,Val).
+								   
+								   
+truth_assignment(X or Y,Vars,A,Val) :-  truth_assignment(X,Vars,A,VX),
+                                   truth_assignment(Y,Vars,A,VY),
+                                   truth_or(VX,VY,Val).
+								   
+
+								   
+truth_assignment(X xor Y,Vars,A,Val) :-  truth_assignment(X,Vars,A,VX),
+                                   truth_assignment(Y,Vars,A,VY),
+                                   truth_xor(VX,VY,Val).
+								   
+								   
+								   
+truth_assignment(not X,Vars,A,Val) :-   truth_assignment(X,Vars,A,VX),
+                                   truth_not(VX,Val).
+								   
+lookup(X,[X|_],[V|_],V).
+
+lookup(X,[_|Vars],[_|A],V) :- lookup(X,Vars,A,V).
 			
 			
 
